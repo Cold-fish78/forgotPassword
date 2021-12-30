@@ -1,9 +1,12 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
+require("dotenv").config();
 const app = express();
 const port = 6002;
 const expressLayouts = require('express-ejs-layouts');
 const db = require('./config/mongoose');
+const {check} = require('express-validator');
+
 // used for session cookie
 const session = require('express-session');
 const passport = require('passport');

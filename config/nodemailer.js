@@ -1,6 +1,7 @@
 const nodemailer = require('nodemailer');
 const ejs = require('ejs');
 const path = require('path');
+
 const { realpath } = require('fs');
 let transporter = nodemailer.createTransport({
     service : 'gmail',
@@ -8,8 +9,8 @@ let transporter = nodemailer.createTransport({
     port : '587',
     secure : 'false',
     auth : {
-        user : 'nikhilrajbhar135@gmail.com',
-        pass : '#1727zeroiqnik;:|'
+        user: process.env.USER,
+        pass: process.env.PASS,
     }
 });
 let renderTemplate = (data, relativePath ) =>{
