@@ -3,9 +3,10 @@ const cookieParser = require('cookie-parser');
 require("dotenv").config();
 const app = express();
 const port = 6002;
+// taskkill /F /IM node.exe
 const expressLayouts = require('express-ejs-layouts');
 const db = require('./config/mongoose');
-const {check} = require('express-validator');
+// const {check} = require('express-validator');
 
 // used for session cookie
 const session = require('express-session');
@@ -17,6 +18,14 @@ const MongoStore = require('connect-mongo')(session);
 const sassMiddleware = require('node-sass-middleware');
 const flash = require('connect-flash');
 const customMware = require('./config/middleware');
+// setup the chat server to be used with socket.io
+
+const chatServer = require('http').Server(app);
+const chatSockets =require('./config/chat_sockets').chatSockets(chatServer);
+chatServer.listen(5000);
+console.log("chat server is listening on port 5000");
+
+
  
 app.use(sassMiddleware({
     src: './assets/scss',
