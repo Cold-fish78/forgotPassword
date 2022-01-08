@@ -36,6 +36,7 @@ router.post('/reset/:token', [
     check('confirmPassword', 'Passwords do not match').custom((value, { req }) => (value === req.body.password)),
 ],usersController.resetPassword);
 router.get('/forgotPassword',usersController.forgotPassword);
+// router.get('/friendReq/:id',usersController.friendReq);
 
 
 module.exports = router;

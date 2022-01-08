@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const sendEmail = require("../views/mailers/sendEmail");
 const passwordChangeMail = require('../views/mailers/passwordChangeMail');
+const friendship = require('../models/friendship');
 
 const nodemailer = require("nodemailer");
 // let's keep it same as before
@@ -181,3 +182,20 @@ module.exports.forgotPassword = function (req, res) {
     return res.render('forgotPassword', { title: "reset your password" });
 
 }
+// for creating friendships
+// module.exports.friendReq =  async function(req,res){
+//      try{
+//         let userId = req.params.id;
+//         let fromId = req.user.id;
+//         console.log("req was sent by user" + fromId);
+//         console.log(userId);
+//  let friendship = await  friendship.create({
+//            from_user: userId,
+//            to_user : fromId
+//        });
+
+//        friendship.save();
+//      }catch(err){
+//          console.log("error occurred in userContro at 190" + err);
+//      }
+// }

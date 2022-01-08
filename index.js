@@ -1,8 +1,12 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
+const morgan = require('morgan');
+var rfs = require('rotating-file-stream');
 require("dotenv").config();
 const app = express();
 const port = 6002;
+const path = require('path');
+const env = require('./config/environment');
 // taskkill /F /IM node.exe
 const expressLayouts = require('express-ejs-layouts');
 const db = require('./config/mongoose');
@@ -25,7 +29,6 @@ const chatSockets =require('./config/chat_sockets').chatSockets(chatServer);
 chatServer.listen(5000);
 console.log("chat server is listening on port 5000");
 
-
  
 app.use(sassMiddleware({
     src: './assets/scss',
@@ -38,9 +41,19 @@ app.use(express.urlencoded());
 
 app.use(cookieParser());
 
-app.use(express.static('./assets'));
+app.use(express.static(process.env.ASSET_PATH));
 // make the uploads path available to the user
 app.use('/uploads',express.static(__dirname + '/uploads'));
+
+var accessLogStream = rfs.createStream('access.log', {
+    interval: '1d', // rotate daily
+    path: path.join(__dirname, 'log')
+  })
+  
+  // setup the logger
+  app.use(morgan('combined', { stream: accessLogStream }))
+
+// app.use(morgan('combined', { stream: env.accessLogStream }))
 app.use(expressLayouts);
 // extract style and scripts from sub pages into the layout
 app.set('layout extractStyles', true);
@@ -57,7 +70,7 @@ app.set('views', './views');
 app.use(session({
     name: 'codeial',
     // TODO change the secret before deployment in production mode
-    secret: 'blahsomething',
+    secret: process.env.SESSION_COOKIE_KEY,
     saveUninitialized: false,
     resave: false,
     cookie: {
